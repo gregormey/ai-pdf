@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grüne Wahlprogramm Chat</title>
+    <style>
+        body { max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; }
+        .question-form { margin-bottom: 20px; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        button { padding: 10px 20px; }
+        .answer { white-space: pre-wrap; background: #f0f0f0; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Fragen zum Wahlprogramm der Grünen</h1>
+    <form class="question-form">
+        <textarea name="question" placeholder="Ihre Frage zum Wahlprogramm..."></textarea><br>
+        <button type="submit">Frage stellen</button>
+    </form>
+    <div class="answer"></div>
+    <script>
+    const socket = new WebSocket('ws://' + window.location.host + '/ws');
+    const answerDiv = document.querySelector('.answer');
+
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.status === 'processing') {
+            answerDiv.textContent = 'Verarbeite Anfrage...';
+        } else {
+            if (answerDiv.textContent === 'Verarbeite Anfrage...') {
+                answerDiv.textContent = data.message;
+            } else {
+                answerDiv.textContent += data.message;
+            }
+        }
+    };
+
+    document.querySelector('form').onsubmit = function(e) {
+        e.preventDefault();
+        const question = document.querySelector('textarea').value;
+        socket.send(question);
+    };
+    </script>
+</body>
+</html>

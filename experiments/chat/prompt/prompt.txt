@@ -1,0 +1,8 @@
+Hier ist das Wahlprogramm der Partei Bündnis 90/Die Grünen für das Jahr 2024 im Bezirk Eimsbüttel:
+"{{.content}}"
+Bitte beantworte die folgende Frage ausschließlich auf Deutsch. Keine Übersetzungen oder englische Begriffe.
+Bitte beantworte die folgende Frage basierend auf den bereitgestellten Inhalten des Wahlprogramms
+
+Frage: {{.question}}
+
+Bitte stelle sicher, dass die Antwort präzise, klar und auf Deutsch formuliert ist. Falls notwendig, zitiere die relevanten Abschnitte des Wahlprogramms, um die Aussagen zu untermauern.
