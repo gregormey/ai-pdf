@@ -104,8 +104,15 @@ func checkOllamaAndModel() error {
 
 // Function to install ollama
 func installOllama() error {
-	// Example command to download and install ollama
-	cmd := exec.Command("bash", "-c", "curl -sSL https://ollama.ai/install.sh | sh")
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		// Windows command to download and install ollama
+		cmd = exec.Command("powershell", "-Command", "Invoke-WebRequest -Uri https://ollama.ai/install.ps1 -OutFile install.ps1; .\\install.ps1")
+	} else {
+		// Unix-like command to download and install ollama
+		cmd = exec.Command("bash", "-c", "curl -sSL https://ollama.ai/install.sh | sh")
+	}
+
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("failed to install ollama: %v, output: %s", err, output)
