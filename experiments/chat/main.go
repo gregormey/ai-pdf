@@ -93,13 +93,13 @@ func checkOllamaAndModel() error {
 		return fmt.Errorf("failed to check models: %v", err)
 	}
 
-	if !strings.Contains(string(output), "llama3.3") {
-		fmt.Println("Model llama3.3 is not installed. Starting download...")
-		cmd = exec.Command("ollama", "pull", "llama3.3")
+	if !strings.Contains(string(output), "mistral") {
+		fmt.Println("Model mistral is not installed. Starting download...")
+		cmd = exec.Command("ollama", "pull", "mistral")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
-			return fmt.Errorf("failed to pull llama3.3 model: %v", err)
+			return fmt.Errorf("failed to pull mistral model: %v", err)
 		}
 		fmt.Println("Model downloaded successfully!")
 	}
@@ -146,7 +146,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	llm, err := ollama.New(ollama.WithModel("llama3.3"))
+	llm, err := ollama.New(ollama.WithModel("mistral"))
 	if err != nil {
 		log.Fatal(err)
 	}

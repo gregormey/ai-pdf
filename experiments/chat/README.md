@@ -1,6 +1,6 @@
 # Grüne Wahlprogramm Chat
 
-Eine Webanwendung zum Stellen von Fragen über das Wahlprogramm der Grünen, basierend auf LLaMA 3.3 und Ollama.
+Eine Webanwendung zum Stellen von Fragen über das Wahlprogramm der Grünen, basierend auf Mistral und Ollama.
 
 ## Voraussetzungen
 
