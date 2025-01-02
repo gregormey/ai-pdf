@@ -108,6 +108,7 @@ func installOllama() error {
 	if runtime.GOOS == "windows" {
 		// Windows command to download and install ollama
 		// Download the OllamaSetup.exe file
+		fmt.Println("Downloading OllamaSetup.exe ... This will take a while ...")
 		cmd = exec.Command("powershell", "-Command", "Invoke-WebRequest -Uri https://ollama.com/download/OllamaSetup.exe -OutFile OllamaSetup.exe")
 		output, err := cmd.CombinedOutput()
 		if err != nil {
