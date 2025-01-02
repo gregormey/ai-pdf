@@ -9,11 +9,18 @@ Eine Webanwendung zum Stellen von Fragen über das Wahlprogramm der Grünen, bas
 
 ### Installation von Ollama
 
-1. Installieren Sie Ollama von [ollama.ai](https://ollama.ai)
+1. Installieren Sie Ollama von [ollama.ai](https://ollama.ai) (optional, die Anwendung kann es auch automatisch installieren).
 2. Öffnen Sie ein Terminal und laden Sie das LLaMA 2 Modell:
    ```bash
    ollama pull llama2
    ```
+
+### Automatische Installation
+
+Die Anwendung überprüft, ob `ollama` installiert ist. Wenn nicht, wird versucht, `ollama` automatisch zu installieren. Stellen Sie sicher, dass Sie über die erforderlichen Berechtigungen verfügen, um Skripte auszuführen.
+
+- **Für Windows**: Die Anwendung verwendet PowerShell, um das Installationsskript herunterzuladen und auszuführen.
+- **Für Unix-ähnliche Systeme**: Die Anwendung verwendet `curl`, um das Installationsskript herunterzuladen und auszuführen.
 
 ### Installation der Abhängigkeiten
 
@@ -26,7 +33,7 @@ go mod tidy
 
 ## Starten der Anwendung
 
-1. Stellen Sie sicher, dass der Ollama-Dienst läuft
+1. Stellen Sie sicher, dass der Ollama-Dienst läuft (oder lassen Sie die Anwendung es automatisch installieren).
 2. Führen Sie die Anwendung aus:
 ```bash
 go run main.go
