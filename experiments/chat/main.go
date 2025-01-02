@@ -7,8 +7,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -58,7 +60,65 @@ func openBrowser(url string) error {
 	return cmd.Start()
 }
 
+func checkOllamaAndModel() error {
+	// Check if ollama is installed
+	_, err := exec.LookPath("ollama")
+	if err != nil {
+		// Attempt to install ollama
+		if installErr := installOllama(); installErr != nil {
+			return fmt.Errorf("ollama is not installed and could not be installed: %v", installErr)
+		}
+		return nil // Retry after installation
+	}
+
+	// Check if ollama service is running
+	cmd := exec.Command("ollama", "list")
+	if err := cmd.Run(); err != nil {
+		// Try to start ollama service
+		fmt.Println("Starting ollama service...")
+		cmd = exec.Command("ollama", "serve")
+		cmd.Start()
+		// Wait for service to start
+		time.Sleep(2 * time.Second)
+	}
+
+	// Check if llama2 model is pulled
+	cmd = exec.Command("ollama", "list")
+	output, err := cmd.Output()
+	if err != nil {
+		return fmt.Errorf("failed to check models: %v", err)
+	}
+
+	if !strings.Contains(string(output), "llama2") {
+		fmt.Println("Pulling llama2 model... This may take a while...")
+		cmd = exec.Command("ollama", "pull", "llama2")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("failed to pull llama2 model: %v", err)
+		}
+	}
+
+	return nil
+}
+
+// Function to install ollama
+func installOllama() error {
+	// Example command to download and install ollama
+	cmd := exec.Command("bash", "-c", "curl -sSL https://ollama.ai/install.sh | sh")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to install ollama: %v, output: %s", err, output)
+	}
+	return nil
+}
+
 func main() {
+	// Check ollama and model before starting
+	if err := checkOllamaAndModel(); err != nil {
+		log.Fatal(err)
+	}
+
 	llm, err := ollama.New(ollama.WithModel("llama2"))
 	if err != nil {
 		log.Fatal(err)
