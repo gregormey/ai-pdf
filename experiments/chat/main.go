@@ -64,11 +64,15 @@ func checkOllamaAndModel() error {
 	// Check if ollama is installed
 	_, err := exec.LookPath("ollama")
 	if err != nil {
-		// Attempt to install ollama
+		fmt.Println("Ollama is not installed. Starting installation...")
 		if installErr := installOllama(); installErr != nil {
-			return fmt.Errorf("ollama is not installed and could not be installed: %v", installErr)
+			return fmt.Errorf("ollama installation failed: %v", installErr)
 		}
-		return nil // Retry after installation
+		fmt.Println("\nOllama installation initiated.")
+		fmt.Println("Please wait for the installation to complete, then:")
+		fmt.Println("1. Start Ollama manually or restart your computer")
+		fmt.Println("2. Run this application again")
+		os.Exit(0)
 	}
 
 	// Check if ollama service is running
@@ -82,7 +86,7 @@ func checkOllamaAndModel() error {
 		time.Sleep(2 * time.Second)
 	}
 
-	// Check if llama2 model is pulled
+	// Check if model is pulled
 	cmd = exec.Command("ollama", "list")
 	output, err := cmd.Output()
 	if err != nil {
@@ -90,13 +94,14 @@ func checkOllamaAndModel() error {
 	}
 
 	if !strings.Contains(string(output), "llama3.3") {
-		fmt.Println("Pulling llama3.3 model... This may take a while...")
+		fmt.Println("Model llama3.3 is not installed. Starting download...")
 		cmd = exec.Command("ollama", "pull", "llama3.3")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
 			return fmt.Errorf("failed to pull llama3.3 model: %v", err)
 		}
+		fmt.Println("Model downloaded successfully!")
 	}
 
 	return nil
